@@ -1,0 +1,82 @@
+import React from "react";
+import { ArrowRight, BookOpen, ChevronRight } from "lucide-react";
+import BookCover from "./BookCover";
+type Book = {
+  title: string;
+  genre: string;
+  chapters: number;
+  readTime: string;
+  synopsis: string;
+  color: string;
+  accent: string;
+  status: string;
+};
+
+const MordernBookCard = ({
+  book,
+  onClick,
+}: {
+  book: Book;
+  onClick?: () => void;
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className="modern-book-card group w-full text-left"
+      aria-label={`Read ${book.title}`}
+    >
+      <div className="modern-book-frame relative block overflow-hidden rounded-[5px_18px_18px_5px]">
+        <BookCover book={book} compact />
+        <span className="book-reveal pointer-events-none absolute inset-0 z-10 overflow-hidden text-white">
+          <span className="book-reveal-half book-reveal-top absolute inset-x-0 top-0 h-1/2" />
+          <span className="book-reveal-half book-reveal-bottom absolute inset-x-0 bottom-0 h-1/2" />
+          <span className="book-reveal-details absolute inset-0 z-10 flex flex-col justify-between p-5 sm:p-6">
+            <span className="book-reveal-content flex items-center justify-between">
+              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.18em] backdrop-blur-md">
+                {book.genre}
+              </span>
+              <span className="text-[10px] font-semibold text-white/55">
+                {book.readTime}
+              </span>
+            </span>
+            <span className="book-reveal-content block">
+              <span className="mb-4 block h-px w-9 bg-[#d9b36c]" />
+              <span className="block font-serif text-[clamp(1.55rem,2.3vw,2.15rem)] leading-[1.08]">
+                {book.title}
+              </span>
+              <span className="mt-3 block text-[11px] leading-[1.7] text-white/70">
+                {book.synopsis}
+              </span>
+              <span className="mt-5 flex items-center justify-between border-t border-white/15 pt-4">
+                <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.13em]">
+                  <BookOpen size={14} /> {book.chapters} chapters
+                </span>
+                <span className="grid size-9 place-items-center rounded-full border border-white/30 transition duration-500 group-hover:rotate-[-8deg] group-hover:bg-white group-hover:text-[#18382f]">
+                  <ArrowRight size={15} />
+                </span>
+              </span>
+            </span>
+          </span>
+        </span>
+      </div>
+      <div className="mt-5 flex items-start justify-between gap-4">
+        <span>
+          <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[#a45134]">
+            {book.genre}
+          </span>
+          <span className="mt-1.5 block font-serif text-[22px] leading-tight text-[#183a31]">
+            {book.title}
+          </span>
+          <span className="mt-2 block text-[11px] text-[#78817b]">
+            E. Rowan · {book.chapters} chapters
+          </span>
+        </span>
+        <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-[#18382f]/15 text-[#18382f] transition duration-300 group-hover:border-[#a45134] group-hover:text-[#a45134]">
+          <ChevronRight size={15} />
+        </span>
+      </div>
+    </button>
+  );
+};
+
+export default MordernBookCard;

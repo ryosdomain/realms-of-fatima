@@ -12,15 +12,48 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+ 
+.editor-copy p { margin: 0 0 1em; }
+ 
+.editor-copy h1 {
+  font-size: 1.7em;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.6em;
+}
+ 
+.editor-copy h2 {
+  font-size: 1.3em;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 1.4em 0 0.4em;
+}
+ 
+.editor-copy strong { font-weight: 700; }
+.editor-copy span[style*="font-weight"] strong { font-weight: inherit; }
+.editor-copy em { font-style: italic; }
+ 
+.editor-copy blockquote {
+  margin: 1.2em 0;
+  padding-left: 1em;
+  border-left: 3px solid #a45134; /* your terracotta accent */
+  font-style: italic;
+}
+ 
+/* selection color that matches the theme */
+.editor-copy ::selection { background: #18382f22; }
+ 
