@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -6,6 +7,8 @@
 }
 
 @theme inline {
+  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Playfair Display", serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -57,3 +60,193 @@ body {
 /* selection color that matches the theme */
 .editor-copy ::selection { background: #18382f22; }
  
+
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    background: #f7f3ea;
+    color: #21332e;
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  select {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: #a45134;
+    color: white;
+  }
+}
+
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.book-cover {
+  box-shadow:
+    -12px 18px 40px rgba(26, 36, 29, 0.19),
+    inset 12px 0 20px rgba(255, 255, 255, 0.035),
+    inset -2px 0 3px rgba(0, 0, 0, 0.18);
+}
+
+.modern-book-card {
+  position: relative;
+  transition:
+    transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 600ms ease;
+}
+
+.modern-book-frame {
+  isolation: isolate;
+  box-shadow: 0 20px 50px rgba(26, 36, 29, 0.12);
+  transition:
+    box-shadow 600ms ease,
+    border-radius 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.book-reveal {
+  --reveal-speed: 760ms;
+}
+
+.book-reveal::before {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(31, 83, 68, 0.68), rgba(18, 56, 46, 0.76));
+  opacity: 0;
+  -webkit-backdrop-filter: blur(13px) saturate(115%);
+  backdrop-filter: blur(13px) saturate(115%);
+  content: "";
+  transition: opacity 220ms ease 430ms;
+}
+
+.book-reveal-half {
+  z-index: 1;
+  height: calc(50% + 4px);
+  background: rgba(24, 58, 49, 0.72);
+  transition: transform var(--reveal-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.book-reveal-top {
+  transform: translateY(-102%);
+}
+
+.book-reveal-bottom {
+  transform: translateY(102%);
+}
+
+.book-reveal-content {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 380ms ease 220ms,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 220ms;
+}
+
+@media (hover: hover) {
+  .modern-book-card:hover {
+    z-index: 2;
+    transform: translateY(-10px) scale(1.025);
+  }
+
+  .modern-book-card:hover .modern-book-frame {
+    border-radius: 16px;
+    box-shadow: 0 30px 70px rgba(18, 33, 27, 0.24);
+  }
+
+  .modern-book-card:hover .book-reveal-half {
+    transform: translateY(0);
+  }
+
+  .modern-book-card:hover .book-reveal::before {
+    opacity: 1;
+  }
+
+  .modern-book-card:hover .book-reveal-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (hover: none) {
+  .book-reveal-top {
+    display: none;
+  }
+
+  .book-reveal-bottom {
+    height: 58%;
+    background: linear-gradient(to top, rgba(24, 58, 49, 0.8), transparent);
+    transform: translateY(0);
+  }
+
+  .book-reveal-details > .book-reveal-content:first-child {
+    display: none;
+  }
+
+  .book-reveal-details > .book-reveal-content:last-child {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .book-reveal-details > .book-reveal-content:last-child > :not(:last-child) {
+    display: none;
+  }
+}
+
+.editor-copy {
+  field-sizing: content;
+}
+
+.reader-sheet {
+  box-shadow:
+    0 35px 90px rgba(3, 15, 11, 0.34),
+    0 2px 4px rgba(3, 15, 11, 0.16);
+}
+
+.reader-prose p {
+  margin-top: 1.4em;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.07rem, 1.5vw, 1.22rem);
+  line-height: 1.9;
+  text-align: left;
+}
+
+.reader-prose p:first-child {
+  margin-top: 0;
+}
+
+.reader-prose .opening-paragraph::first-letter {
+  float: left;
+  margin: 0.08em 0.11em 0 0;
+  color: #a45134;
+  font-family: "Playfair Display", serif;
+  font-size: 4.2em;
+  font-weight: 600;
+  line-height: 0.78;
+}
+
+@media (min-width: 720px) {
+  .reader-prose p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

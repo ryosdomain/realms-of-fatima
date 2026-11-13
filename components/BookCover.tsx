@@ -18,9 +18,9 @@ const BookCover = ({
 }) => {
   return (
     <div
-      className={`book-cover relative overflow-hidden rounded-[3px_12px_12px_3px] bg-gradient-to-br ${book.color} text-[#fffaf0] ${compact ? "aspect-[3/4.15]" : "aspect-[3/4.25]"}`}
+      className={`book-cover relative overflow-hidden rounded-[3px_12px_12px_3px] bg-linear-to-br ${book.color} text-[#fffaf0] ${compact ? "aspect-[3/4.15]" : "aspect-3/4.25"}`}
     >
-      <div className="absolute inset-y-0 left-0 w-[7px] border-r border-white/15 bg-black/15" />
+      <div className="absolute inset-y-0 left-0 w-1.75 border-r border-white/15 bg-black/15" />
       <div className="absolute inset-x-5 top-5 h-px bg-white/25" />
       <div className="absolute left-1/2 top-[26%] h-16 w-px -translate-x-1/2 bg-white/20" />
       <div

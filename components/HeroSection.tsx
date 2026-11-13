@@ -9,7 +9,23 @@ type Page = {
   kicker: string;
   paragraphs: string[];
 };
-const HeroSection = ({ storyPages }: { storyPages: Page[] }) => {
+type StoryPage = {
+  chapter: string;
+  title: string;
+  kicker: string;
+  paragraphs: string[];
+};
+
+type Meta = {
+  bookTitle: string;
+  chapterLabel: string;
+  chapterTitle: string;
+  minutes: number;
+};
+
+// your component signature becomes (keep your existing storyPages type):
+const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta }) => {
+
   const [currentPage, setCurrentPage] = useState(0);
 
   const changePage = (nextPage: number) => {
@@ -21,11 +37,12 @@ const HeroSection = ({ storyPages }: { storyPages: Page[] }) => {
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
   };
+  
 
   const page = storyPages[currentPage];
   return (
     <div>
-      <section className="relative bg-[#17352d] px-3 pb-10 pt-4 text-[#f7f2e8] sm:px-6 md:px-10 md:pb-16 md:pt-7">
+      <section id="reader" className="relative bg-[#17352d] px-3 pb-10 pt-4 text-[#f7f2e8] sm:px-6 md:px-10 md:pb-16 md:pt-7">
         <div className="paper-grain pointer-events-none absolute inset-0 opacity-[0.08]" />
         <div className="relative mx-auto max-w-295">
           <div className="mb-4 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/4.5 px-4 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between md:mb-6 md:px-5">
@@ -34,12 +51,12 @@ const HeroSection = ({ storyPages }: { storyPages: Page[] }) => {
                 <BookOpen size={17} />
               </span>
               <div className="min-w-0">
-                <p className="truncate font-serif text-[15px]">
-                  The Quiet Between Stars
-                </p>
-                <p className="text-[10px] text-white/45">
-                  E. Rowan · 8 min read
-                </p>
+               <p className="truncate font-serif text-[15px]">{meta.bookTitle}</p>
+<p className="truncate text-[10px] text-white/45">
+  {[meta.chapterLabel, meta.chapterTitle, meta.minutes ? `${meta.minutes} min read` : ""]
+    .filter(Boolean)
+    .join(" · ")}
+</p>
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:justify-end">

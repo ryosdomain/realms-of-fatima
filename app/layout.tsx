@@ -28,15 +28,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header
-          auth={
-            <Suspense fallback={<AuthLink loggedIn={false} />}>
-              <HeaderAuth />
-            </Suspense>
-          }
-        />
+        <Suspense fallback={null}>
+          <Header
+            auth={
+              <Suspense fallback={<AuthLink loggedIn={false} />}>
+                <HeaderAuth />
+              </Suspense>
+            }
+          />
+        </Suspense>
         {children}
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

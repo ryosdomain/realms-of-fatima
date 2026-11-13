@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 
 export const login = async (
-  formData: FormData
+  formData: FormData,
 ): Promise<{ error: string } | undefined> => {
   const supabase = await createClient();
 
@@ -21,7 +21,4 @@ export const login = async (
     }
     return { error: "Authentication failed. Please try again." };
   }
-
-  
 };
-

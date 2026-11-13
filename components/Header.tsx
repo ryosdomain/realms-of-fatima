@@ -34,10 +34,17 @@ import {
 import Link from "next/link";
 const Header = ({ auth }: { auth: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const path = usePathname();
-  const hideHeaderOnPaths = ["/login", "/admin", "/admin/editor"];
-  if (hideHeaderOnPaths.includes(path)) {
-    return null; // Renders nothing on those pages
+  const path = usePathname() ?? "";
+
+  // the header shows ONLY on these pages (and anything inside them)
+  const showHeaderOn = ["/", "/library","/about"];
+
+  const show = showHeaderOn.some((p) =>
+    p === "/" ? path === "/" : path === p || path.startsWith(p + "/"),
+  );
+
+  if (!show) {
+    return null;
   }
 
   return (
@@ -45,9 +52,10 @@ const Header = ({ auth }: { auth: React.ReactNode }) => {
       <div className="mx-auto flex h-19 max-w-345 items-center justify-between">
         <Logo />
         <nav className="hidden items-center gap-9 text-[13px] font-semibold md:flex">
-          <button className="text-[#a45134]">Featured story</button>
-          <button className="transition hover:text-[#a45134]">Library</button>
-          <button className="transition hover:text-[#a45134]">About</button>
+          <Link href="/" className="transition hover:text-[#a45134]">Home</Link>
+          <Link href="/library" className="transition hover:text-[#a45134]">Library</Link>
+          <Link href="/about" className="transition hover:text-[#a45134]">About</Link>
+          
         </nav>
         <div className="flex items-center gap-2">
           <button

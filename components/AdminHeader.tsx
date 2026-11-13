@@ -30,7 +30,7 @@ const AdminHeader = () => {
             </div>
             <div className="flex items-center gap-3">
                 
-              <Link href={'/'} className="hidden items-center gap-2 rounded-xl border border-[#18382f]/12 px-4 py-2.5 text-xs font-semibold sm:flex">
+              <Link href={'/'} target='_blank' className="hidden items-center gap-2 rounded-xl border border-[#18382f]/12 px-4 py-2.5 text-xs font-semibold sm:flex">
                 <Eye size={15} /> Preview site
               </Link>
               <div className="grid size-9 place-items-center rounded-full bg-[#a45134] font-serif text-sm text-white">
