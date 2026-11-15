@@ -1,44 +1,31 @@
-import React from 'react'
-import {
-  ArrowRight,
-  BookCopy,
-  ChevronDown,
-  Clock3,
-  Eye,
-  FilePenLine,
-  FileText,
-  Menu,
-  
-} from "lucide-react";
-import Link from 'next/link';
+import { Suspense } from "react";
+import { connection } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { SidebarBody } from "@/components/SideBar";
+import AdminHeaderClient from "@/components/AdminHeaderClient";
 
-const AdminHeader = () => {
+async function Loaded() {
+  await connection();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+
   return (
-    <div><header className="flex h-18 items-center justify-between border-b border-[#18382f]/10 bg-[#faf8f3] px-5 md:px-8">
-            <div className="flex items-center gap-3">
-              <button className="grid size-10 place-items-center rounded-xl border border-[#18382f]/10 lg:hidden">
-                <Menu size={19} />
-              </button>
-              <div>
-                <h1 className="font-serif text-xl text-[#183a31]">
-                  Author studio
-                </h1>
-                <p className="hidden text-[11px] text-[#87908b] sm:block">
-                  Tuesday, 17 June
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-                
-              <Link href={'/'} target='_blank' className="hidden items-center gap-2 rounded-xl border border-[#18382f]/12 px-4 py-2.5 text-xs font-semibold sm:flex">
-                <Eye size={15} /> Preview site
-              </Link>
-              <div className="grid size-9 place-items-center rounded-full bg-[#a45134] font-serif text-sm text-white">
-                ER
-              </div>
-            </div>
-          </header></div>
-  )
+    <AdminHeaderClient
+      today={today}
+      user={{ name: String(user?.user_metadata?.name ?? ""), email: user?.email ?? "" }}
+      nav={<SidebarBody />}
+    />
+  );
 }
 
-export default AdminHeader
+export default function AdminHeader() {
+  return (
+    <Suspense fallback={<AdminHeaderClient today="" user={{ name: "", email: "" }} nav={<SidebarBody />} />}>
+      <Loaded />
+    </Suspense>
+  );
+}

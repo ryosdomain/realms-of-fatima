@@ -48,7 +48,7 @@ const Header = ({ auth }: { auth: React.ReactNode }) => {
   }
 
   return (
-    <header className="border-b border-[#18382f]/10 px-5 md:px-10">
+    <header className="border-b border-[#18382f]/25 px-5 md:px-10">
       <div className="mx-auto flex h-19 max-w-345 items-center justify-between">
         <Logo />
         <nav className="hidden items-center gap-9 text-[13px] font-semibold md:flex">
@@ -66,8 +66,10 @@ const Header = ({ auth }: { auth: React.ReactNode }) => {
           </button>
 
           {/* Login / DashBoard Button  */}
+          <div className="hidden sm:block">
 
           {auth}
+          </div>
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -80,14 +82,10 @@ const Header = ({ auth }: { auth: React.ReactNode }) => {
       </div>
       {mobileOpen && (
         <div className="space-y-1 border-t border-[#18382f]/10 py-3 md:hidden">
-          {["Featured story", "Library", "Author login"].map((item) => (
-            <button
-              key={item}
-              className="block w-full rounded-lg px-3 py-3 text-left text-sm font-semibold hover:bg-white/60"
-            >
-              {item}
-            </button>
-          ))}
+          <Link onClick={() => setMobileOpen(!mobileOpen)} className="block w-full rounded-lg px-3 py-3 text-left text-sm font-semibold hover:bg-white/60" href={"/"}>Home</Link>
+          <Link onClick={() => setMobileOpen(!mobileOpen)} className="block w-full rounded-lg px-3 py-3 text-left text-sm font-semibold hover:bg-white/60" href={"/library"}>Library</Link>
+          <Link onClick={() => setMobileOpen(!mobileOpen)} className="block w-full rounded-lg px-3 py-3 text-left text-sm font-semibold hover:bg-white/60" href={"/about"}>About</Link>
+          {auth}
         </div>
       )}
     </header>

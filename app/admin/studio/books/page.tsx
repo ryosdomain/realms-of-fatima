@@ -14,7 +14,7 @@ import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import BooksTable from "@/components/BooksTable";
 
-// inside your page, where the table was:
+// inside page, where the table was:
 
 async function BookList() {
   await connection();

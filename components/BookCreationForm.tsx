@@ -107,25 +107,30 @@ function SubmitButtons({ editing }: { editing: boolean }) {
         </button>
       </div>
     );
-  else
+   else
     return (
-      <div className="mt-8 flex gap-3">
-        <button
-          name="intent"
-          value="draft"
-          disabled={pending}
-          className="h-12 flex-1 rounded-xl border border-[#18382f]/12 text-sm font-semibold disabled:opacity-50"
-        >
-          {pending ? "Saving…" : "Save as draft"}
-        </button>
-        <button
-          name="intent"
-          value="write"
-          disabled={pending}
-          className="h-12 flex-1 rounded-xl bg-[#183a31] text-sm font-semibold text-white disabled:opacity-50"
-        >
-          Create & write
-        </button>
+      <div className="mt-8 space-y-3">
+        <div className="flex gap-3">
+          <button
+            name="intent"
+            value="draft"
+            disabled={pending}
+            className="h-12 flex-1 rounded-xl border border-[#18382f]/12 text-sm font-semibold disabled:opacity-50"
+          >
+            {pending ? "Saving…" : "Save as draft"}
+          </button>
+          <button
+            name="intent"
+            value="publish"
+            disabled={pending}
+            className="h-12 flex-1 rounded-xl bg-[#183a31] text-sm font-semibold text-white disabled:opacity-50"
+          >
+            Create & publish
+          </button>
+        </div>
+        <p className="text-center text-[11px] leading-5 text-[#8a918d]">
+          Create & publish opens the editor so you can write the first chapter.
+        </p>
       </div>
     );
 }
@@ -143,7 +148,7 @@ const BookCreationForm = ({
   const [open, setOpen] = useState(editing); // edit mode starts open
   const [title, setTitle] = useState(book?.title ?? "");
   const [visibility, setVisibility] = useState<"private" | "public">(
-    book?.visibility ?? "private",
+    book?.visibility ?? "public",
   );
   const [from, setFrom] = useState(book?.cover_from ?? palettes[0][0]);
   const [to, setTo] = useState(book?.cover_to ?? palettes[0][1]);
@@ -167,19 +172,21 @@ const BookCreationForm = ({
     }
     if (!editing) {
       setTitle("");
-      setVisibility("private");
+      setVisibility("public");
     }
     close();
   }
 
   return (
     <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="flex items-center justify-center gap-2 rounded-xl bg-[#183a31] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[#214a3f]"
-      >
-        <Plus size={17} /> Create new book
-      </button>
+      {!editing && (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center justify-center gap-2 rounded-xl bg-[#183a31] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[#214a3f]"
+        >
+          <Plus size={17} /> Create new book
+        </button>
+      )}
 
       {open && (
         <div
@@ -267,8 +274,8 @@ const BookCreationForm = ({
                   <div className="grid grid-cols-2 gap-2">
                     {(
                       [
-                        ["private", "Private", "Only you", Lock],
                         ["public", "Public", "Readers, once published", Globe],
+                        ["private", "Private", "Only you", Lock],
                       ] as const
                     ).map(([value, label, note, Icon]) => (
                       <button

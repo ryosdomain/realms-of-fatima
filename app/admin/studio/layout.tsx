@@ -1,4 +1,4 @@
-"use client";
+
 import { Menu, Eye } from "lucide-react";
 import SideBar from "@/components/SideBar";
 import AdminHeader from "@/components/AdminHeader";

@@ -60,10 +60,10 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:justify-end">
-              <button className="flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-semibold text-white/60 transition hover:bg-white/10 hover:text-white">
+              {/* <button className="flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-semibold text-white/60 transition hover:bg-white/10 hover:text-white">
                 <BookMarked size={15} />{" "}
                 <span className="hidden min-[400px]:inline">Save place</span>
-              </button>
+              </button> */}
               <span className="h-5 w-px bg-white/10" />
               <div className="flex items-center gap-1">
                 <button
@@ -107,9 +107,9 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
             className="reader-sheet relative mx-auto min-h-225 max-w-230 scroll-mt-4 overflow-hidden bg-[#fffdf7] px-7 py-9 text-[#2d332f] sm:px-12 sm:py-12 md:min-h-[1080px] md:px-[clamp(4rem,9vw,7.5rem)] md:py-16"
           >
             <div className="paper-grain pointer-events-none absolute inset-0 opacity-[0.09]" />
-            <div className="relative">
+            <div className="relative flex min-h-screen flex-col ">
               <div className="flex items-center justify-between border-b border-[#2d332f]/10 pb-4 text-[9px] font-bold uppercase tracking-[0.19em] text-[#7d807b] sm:text-[10px]">
-                <span>The Quiet Between Stars</span>
+                <span>{meta.bookTitle}</span>
                 <span>{page.chapter}</span>
               </div>
 
@@ -126,7 +126,7 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
                 <span className="mx-auto mt-8 block size-1.5 rotate-45 bg-[#a45134]" />
               </header>
 
-              <div className="reader-prose mx-auto max-w-[650px]">
+              <div className="reader-prose flex-1 mx-auto max-w-[650px]">
                 {page.paragraphs.map((paragraph, index) => (
                   <p
                     key={`${currentPage}-${index}`}
@@ -137,10 +137,10 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
                 ))}
               </div>
 
-              <div className="mx-auto mt-16 flex max-w-[650px] items-center justify-between border-t border-[#2d332f]/10 pt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#888a84]">
-                <span>E. Rowan</span>
+              <div className="mx-auto mt-auto flex w-full max-w-[650px] items-center justify-between border-t border-[#2d332f]/16 pt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#888a84]">
+                <span>Arthur</span>
                 <span>{currentPage + 1}</span>
-                <span>Tale & Ink</span>
+                <span className="hidden sm:block">Realms of Fatima</span>
               </div>
             </div>
           </article>

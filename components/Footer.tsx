@@ -18,13 +18,13 @@ const Footer = () => {
          return null;
        }
   return (
-    <footer className="border-t border-[#18382f]/10 px-5 py-8 md:px-10">
+    <footer className="border-t border-[#18382f]/25 px-5 py-8 md:px-10">
       <div className="mx-auto flex max-w-310 flex-col items-center justify-between gap-5 sm:flex-row">
         <Logo />
         <p className="text-xs text-[#77807a]">
-          Independent stories, thoughtfully told.
+          
         </p>
-        <p className="text-xs text-[#77807a]">© 2025 Tale & Ink</p>
+        <p className="text-xs text-[#77807a]">© 2026 Realms of Fatima</p>
       </div>
     </footer>
   );

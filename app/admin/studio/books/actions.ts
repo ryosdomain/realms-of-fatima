@@ -28,26 +28,33 @@ function fieldsFrom(formData: FormData) {
     title: text("title") || "Untitled story",
     description: text("description") || null,
     genre: text("genre") || null,
-    visibility: text("visibility") === "public" ? "public" : "private",
+    visibility: text("visibility") === "private" ? "private" : "public",
     cover_from: hex.test(text("cover_from")) ? text("cover_from") : "#1a3c35",
     cover_to: hex.test(text("cover_to")) ? text("cover_to") : "#31594e",
-    cover_shape: shapes.includes(text("cover_shape")) ? text("cover_shape") : "none",
+    cover_shape: shapes.includes(text("cover_shape"))
+      ? text("cover_shape")
+      : "none",
   };
 }
 
 export async function createBook(formData: FormData) {
   const supabase = await authed();
+  const intent = String(formData.get("intent") ?? "");
 
   const { data: book, error } = await supabase
     .from("books")
-    .insert(fieldsFrom(formData))
+    .insert({
+      ...fieldsFrom(formData),
+      status: intent === "publish" ? "published" : "draft",
+    })
     .select("id")
     .single();
   if (error) return { error: error.message };
 
   refresh();
 
-  if (String(formData.get("intent")) === "write") {
+  // "Create & publish" also adds Chapter 1 and opens the editor
+  if (intent === "publish") {
     const { data: chapter, error: chapterError } = await supabase
       .from("chapters")
       .insert({ book_id: book.id, title: "Chapter 1", position: 1 })
@@ -65,7 +72,10 @@ export async function updateBook(formData: FormData) {
   const supabase = await authed();
   const id = String(formData.get("id") ?? "");
 
-  const { error } = await supabase.from("books").update(fieldsFrom(formData)).eq("id", id);
+  const { error } = await supabase
+    .from("books")
+    .update(fieldsFrom(formData))
+    .eq("id", id);
   if (error) return { error: error.message };
 
   refresh();
@@ -78,7 +88,10 @@ export async function setBookStatus(id: string, status: "draft" | "published") {
   refresh();
 }
 
-export async function setBookVisibility(id: string, visibility: "public" | "private") {
+export async function setBookVisibility(
+  id: string,
+  visibility: "public" | "private",
+) {
   const supabase = await authed();
   await supabase.from("books").update({ visibility }).eq("id", id);
   refresh();
@@ -87,7 +100,11 @@ export async function setBookVisibility(id: string, visibility: "public" | "priv
 export async function setBookFeatured(id: string, featured: boolean) {
   const supabase = await authed();
   // only one featured book at a time
-  if (featured) await supabase.from("books").update({ featured: false }).eq("featured", true);
+  if (featured)
+    await supabase
+      .from("books")
+      .update({ featured: false })
+      .eq("featured", true);
   await supabase.from("books").update({ featured }).eq("id", id);
   refresh();
 }

@@ -74,10 +74,10 @@ const textColorOptions = [
 ];
 const pageColorOptions = [
   "#fffdf7",
-  "#f7f3ea",
-  "#f1f5f2",
-  "#f1f3f7",
-  "#fff5f1",
+  "#00f3ea",
+  "#f1f500",
+  "#f100f7",
+  "#000000",
 ];
 
 const initialContent = `
@@ -140,7 +140,7 @@ function FormatButtons({ editor }: { editor: Editor }) {
           aria-pressed={t.active}
           onMouseDown={(e) => e.preventDefault()}
           onClick={t.run}
-          className={`grid h-8 min-w-8 place-items-center rounded-md px-2 text-xs font-semibold transition ${t.className} ${
+          className={`grid h-8  min-w-8 place-items-center rounded-md px-2 text-xs font-semibold transition ${t.className} ${
             t.active ? "bg-[#183a31] text-white" : "hover:bg-[#eae4d8]"
           }`}
         >
@@ -520,9 +520,9 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="hidden h-10 items-center gap-2 rounded-lg border border-[#18382f]/10 px-4 text-xs font-semibold sm:flex">
+          {/* <button className="hidden h-10 items-center gap-2 rounded-lg border border-[#18382f]/10 px-4 text-xs font-semibold sm:flex">
             <Eye size={15} /> Preview
-          </button>
+          </button> */}
           <button
             onClick={() => save()}
             disabled={pending}
@@ -563,9 +563,9 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
           <Settings size={16} /> Appearance & settings
         </button>
         <span className="my-2 w-px bg-[#18382f]/10 sm:hidden" />
-        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold hover:bg-[#18382f]/5 sm:hidden">
+        {/* <button className="flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold hover:bg-[#18382f]/5 sm:hidden">
           <Eye size={16} /> Preview
-        </button>
+        </button> */}
       </div>
 
       <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] xl:grid-cols-[250px_1fr_290px]">
@@ -576,9 +576,9 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
             bookId={book.id}
             dirty={dirty}
           />
-          <pre className="mt-6 whitespace-pre-wrap text-xs text-black/60">
+          {/* <pre className="mt-6 whitespace-pre-wrap text-xs text-black/60">
             {editor?.getHTML()}
-          </pre>
+          </pre> */}
         </aside>
 
         <main
@@ -598,7 +598,7 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
                   }
                   inputMode="numeric"
                   aria-label="Chapter number"
-                  className="h-12 w-20 rounded-xl border border-[#18382f]/15 bg-white/70 px-3 text-center font-serif text-xl outline-none focus:border-[#a45134]"
+                  className="h-12 w-20 rounded-xl border border-[#18382f]/25 bg-white/70 px-3 text-center font-serif text-xl outline-none focus:border-[#a45134]"
                 />
               </label>
               <label className="min-w-0 flex-1">
@@ -610,8 +610,8 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
                   onChange={(e) => changeTitle(e.target.value)}
                   placeholder="Untitled chapter"
                   aria-label="Chapter title"
-                  className="h-12 w-full rounded-xl border border-[#18382f]/15 bg-white/70 px-4 font-serif text-2xl tracking-[-0.02em] outline-none focus:border-[#a45134]"
-                  style={{ color: textColor }}
+                  className="h-12 w-full rounded-xl border border-[#18382f]/25 bg-white/70 px-4 font-serif text-2xl tracking-[-0.02em] outline-none focus:border-[#a45134]"
+                  
                 />
               </label>
             </div>
@@ -622,7 +622,7 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
             </div>
 
             <div
-              className="sticky top-0 z-10 mt-4 flex items-center gap-1 overflow-x-auto border-y border-[#18382f]/10 py-2 text-[#61706a]"
+              className="sticky backdrop-blur-3xl top-0 z-10 mt-4 flex items-center gap-1 overflow-x-auto border-y border-[#18382f]/25 py-2 text-[#61706a]"
               style={{ backgroundColor: pageColor }}
             >
               {editor && <FormatButtons editor={editor} />}

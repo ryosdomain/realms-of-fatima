@@ -58,7 +58,7 @@ body {
 }
  
 /* selection color that matches the theme */
-.editor-copy ::selection { background: #18382f22; }
+/* .editor-copy ::selection { background: #18382f22; } */
  
 
 

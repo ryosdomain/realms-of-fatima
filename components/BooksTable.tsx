@@ -84,9 +84,13 @@ type Actions = {
   featured: (id: string) => void;
   duplicate: (id: string) => void;
   remove: (book: Book) => void;
+  view: (book: Book) => void;
   edit: (id: string) => void;
 };
-
+// a book is visible to readers only when it's published AND public
+const canView = (b: Book) =>
+  b.status === "Published" && b.visibility === "Public";
+const viewHref = (b: Book) => `/?book=${b.id}`;
 /* ---------- small pieces ---------- */
 
 function Cover({ from, to }: { from: string; to: string }) {
@@ -189,9 +193,14 @@ function RowMenu({
             <button className={menuItem} onClick={run(() => a.edit(book.id))}>
               <PencilLine size={14} className="text-[#a45134]" /> Edit details
             </button>
-            <button className={menuItem} onClick={run(() => {})}>
-              <Eye size={14} className="text-[#a45134]" /> View on site
-            </button>
+            <button
+  className={`${menuItem} disabled:cursor-not-allowed disabled:opacity-40`}
+  disabled={!canView(book)}
+  title={canView(book) ? undefined : "Publish the book and make it public first"}
+  onClick={run(() => a.view(book))}
+>
+  <Eye size={14} className="text-[#a45134]" /> View on site
+</button>
 
             <div className="my-1 h-px bg-[#d6cfbf]" />
 
@@ -223,12 +232,15 @@ function RowMenu({
               <Star size={14} className="text-[#a45134]" />
               {book.featured ? "Remove from homepage" : "Feature on homepage"}
             </button>
-            <button
+
+            {/* duplicate button not needed yet  */}
+
+            {/* <button
               className={menuItem}
               onClick={run(() => a.duplicate(book.id))}
             >
               <Copy size={14} className="text-[#a45134]" /> Duplicate
-            </button>
+            </button> */}
 
             <div className="my-1 h-px bg-[#d6cfbf]" />
 
@@ -263,6 +275,7 @@ export default function BooksTable({ books }: { books: DbBook[] }) {
     });
 
   const actions: Actions = {
+    view: (b) => window.open(viewHref(b), "_blank"),
     visibility: (id) =>
       run(() =>
         setBookVisibility(
@@ -404,13 +417,26 @@ export default function BooksTable({ books }: { books: DbBook[] }) {
             >
               <PencilLine size={15} />
             </button>
-            <button
-              className={`${iconBtn} hidden lg:grid`}
-              aria-label={`View ${book.title}`}
-              title="View on site"
-            >
-              <Eye size={15} />
-            </button>
+            {canView(book) ? (
+              <Link
+                href={viewHref(book)}
+                target="_blank"
+                className={`${iconBtn} hidden lg:grid`}
+                aria-label={`View ${book.title} on the site`}
+                title="View on site"
+              >
+                <Eye size={15} />
+              </Link>
+            ) : (
+              <button
+                disabled
+                className={`${iconBtn} hidden cursor-not-allowed opacity-40 lg:grid`}
+                aria-label={`${book.title} isn't live yet`}
+                title="Publish the book and make it public to view it on the site"
+              >
+                <Eye size={15} />
+              </button>
+            )}
             <RowMenu book={book} dropUp={dropUp(index)} a={actions} />
           </div>
         </div>

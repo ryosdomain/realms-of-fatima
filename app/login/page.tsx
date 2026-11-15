@@ -89,14 +89,14 @@ const page = () => {
                 type="email"
                 required
                 placeholder="you@example.com"
-                className="h-13 w-full rounded-xl border border-[#18382f]/15 bg-white/55 px-4 text-sm outline-none transition focus:border-[#a45134] focus:ring-3 focus:ring-[#a45134]/10"
+                className="h-13 w-full rounded-xl border border-[#18382f]/25 bg-white/55 px-4 text-sm outline-none transition focus:border-[#a45134] focus:ring-3 focus:ring-[#a45134]/10"
               />
             </label>
             <label className="block">
               <span className="mb-2 block text-xs font-bold text-[#344740]">
                 Password
               </span>
-              <span className="flex h-13 items-center rounded-xl border border-[#18382f]/15 bg-white/55 pr-3 transition focus-within:border-[#a45134] focus-within:ring-3 focus-within:ring-[#a45134]/10">
+              <span className="flex h-13 items-center rounded-xl border border-[#18382f]/25 bg-white/55 pr-3 transition focus-within:border-[#a45134] focus-within:ring-3 focus-within:ring-[#a45134]/10">
                 <input
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -115,20 +115,20 @@ const page = () => {
               </span>
             </label>
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-xs text-[#5d6b65]">
+              {/* <label className="flex items-center gap-2 text-xs text-[#5d6b65]">
                 <input
                   type="checkbox"
                   defaultChecked
                   className="accent-[#183a31]"
                 />{" "}
                 Keep me signed in
-              </label>
-              <button
+              </label> */}
+              {/* <button
                 type="button"
                 className="text-xs font-semibold text-[#a45134]"
               >
                 Forgot password?
-              </button>
+              </button> */}
             </div>
             {error && (
               <div

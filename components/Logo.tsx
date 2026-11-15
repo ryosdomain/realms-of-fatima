@@ -1,8 +1,10 @@
 import React from "react";
 import { BookOpen } from "lucide-react";
+import Link from "next/link";
 const Logo = ({ light = false }: { light?: boolean }) => {
   return (
-    <button
+    
+    <Link href={"/"}
       className={`group flex items-center gap-3 ${light ? "text-[#f7f2e8]" : "text-[#18382f]"}`}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Tale & Ink home"
@@ -12,10 +14,10 @@ const Logo = ({ light = false }: { light?: boolean }) => {
       >
         <BookOpen size={17} strokeWidth={1.8} />
       </span>
-      <span className="font-serif text-[21px] tracking-[-0.02em]">
-        Tale & Ink
+      <span className="uppercase font-serif text-[16px] tracking-[0.02em]">
+        Realms of Fatima
       </span>
-    </button>
+    </Link>
   );
 };
 

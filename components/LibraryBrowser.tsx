@@ -36,7 +36,7 @@ const duration = (minutes: number) =>
   minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)} hr ${minutes % 60} min`;
 
 const selectCls =
-  "h-11 rounded-xl border border-[#18382f]/15 bg-white px-3 text-xs font-semibold text-[#32453f] outline-none transition focus:border-[#a45134]";
+  "h-11 rounded-xl border border-[#18382f]/25 bg-white px-3 text-xs font-semibold text-[#32453f] outline-none transition focus:border-[#a45134]";
 
 export default function LibraryBrowser({ items }: { items: LibraryItem[] }) {
   const [query, setQuery] = useState("");
@@ -99,7 +99,7 @@ export default function LibraryBrowser({ items }: { items: LibraryItem[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by title, genre or what it's about"
-            className="h-11 w-full rounded-xl border border-[#18382f]/15 bg-white pl-11 pr-10 text-sm outline-none transition placeholder:text-[#87908b] focus:border-[#a45134]"
+            className="h-11 w-full rounded-xl border border-[#18382f]/25 bg-white pl-11 pr-10 text-sm outline-none transition placeholder:text-[#87908b] focus:border-[#a45134]"
           />
           {query && (
             <button
@@ -137,10 +137,10 @@ export default function LibraryBrowser({ items }: { items: LibraryItem[] }) {
             key={name}
             onClick={() => setGenre(name)}
             aria-pressed={genre === name}
-            className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold transition ${
+            className={`shrink-0 rounded-full border border-[#18382f]/25 px-4 py-2 text-xs font-semibold transition ${
               genre === name
                 ? "border-[#183a31] bg-[#183a31] text-white"
-                : "border-[#18382f]/15 bg-white text-[#32453f] hover:bg-[#eae4d8]"
+                : "border-[#18382f]/25 bg-white text-[#32453f] hover:bg-[#eae4d8]"
             }`}
           >
             {name} <span className={genre === name ? "text-white/60" : "text-[#87908b]"}>{count}</span>
@@ -181,7 +181,7 @@ export default function LibraryBrowser({ items }: { items: LibraryItem[] }) {
           ))}
         </div>
       ) : (
-        <div className="mt-8 rounded-2xl border border-dashed border-[#18382f]/20 px-6 py-16 text-center">
+        <div className="mt-8 rounded-2xl border border-dashed border-[#18382f]/25 px-6 py-16 text-center">
           <p className="font-serif text-2xl text-[#183a31]">
             {items.length === 0 ? "No stories yet" : "Nothing matches"}
           </p>
@@ -193,7 +193,7 @@ export default function LibraryBrowser({ items }: { items: LibraryItem[] }) {
           {hasFilters && (
             <button
               onClick={clear}
-              className="mt-6 rounded-full border border-[#18382f]/20 px-6 py-2.5 text-sm font-semibold transition hover:bg-[#183a31] hover:text-white"
+              className="mt-6 rounded-full border border-[#18382f]/25 px-6 py-2.5 text-sm font-semibold transition hover:bg-[#183a31] hover:text-white"
             >
               Clear filters
             </button>
