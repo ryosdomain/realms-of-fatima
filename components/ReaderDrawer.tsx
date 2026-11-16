@@ -126,7 +126,7 @@ export default function ReaderDrawer({
       <button
         onClick={openDrawer}
         aria-label="Open library"
-        className={`absolute ${sides.tab} top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-3 border border-white/20 bg-black/60 px-2.5 py-5 text-white shadow-lg backdrop-blur-xl transition duration-300 hover:bg-black/80 ${
+        className={`absolute ${sides.tab} top-1/4 z-30 flex translate-y-1/2 flex-col items-center gap-3 border border-white/20 bg-black/60 px-2.5 py-5 text-white shadow-lg backdrop-blur-xl transition duration-300 hover:bg-black/80 ${
           open ? "pointer-events-none opacity-0" : ""
         }`}
       >
