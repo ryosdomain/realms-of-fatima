@@ -88,8 +88,7 @@ type Actions = {
   edit: (id: string) => void;
 };
 // a book is visible to readers only when it's published AND public
-const canView = (b: Book) =>
-  b.status === "Published" && b.visibility === "Public";
+const canView = (b: Book) => b.status === "Published";
 const viewHref = (b: Book) => `/?book=${b.id}`;
 /* ---------- small pieces ---------- */
 
@@ -194,13 +193,13 @@ function RowMenu({
               <PencilLine size={14} className="text-[#a45134]" /> Edit details
             </button>
             <button
-  className={`${menuItem} disabled:cursor-not-allowed disabled:opacity-40`}
-  disabled={!canView(book)}
-  title={canView(book) ? undefined : "Publish the book and make it public first"}
-  onClick={run(() => a.view(book))}
->
-  <Eye size={14} className="text-[#a45134]" /> View on site
-</button>
+              className={`${menuItem} disabled:cursor-not-allowed disabled:opacity-40`}
+              disabled={!canView(book)}
+              title={canView(book) ? undefined : "Publish the book first"}
+              onClick={run(() => a.view(book))}
+            >
+              <Eye size={14} className="text-[#a45134]" /> View on site
+            </button>
 
             <div className="my-1 h-px bg-[#d6cfbf]" />
 
@@ -432,7 +431,7 @@ export default function BooksTable({ books }: { books: DbBook[] }) {
                 disabled
                 className={`${iconBtn} hidden cursor-not-allowed opacity-40 lg:grid`}
                 aria-label={`${book.title} isn't live yet`}
-                title="Publish the book and make it public to view it on the site"
+                title="Publish the book to view it on the site"
               >
                 <Eye size={15} />
               </button>

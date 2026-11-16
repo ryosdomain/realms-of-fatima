@@ -8,12 +8,14 @@ type Page = {
   title: string;
   kicker: string;
   paragraphs: string[];
+  html?: string;
 };
 type StoryPage = {
   chapter: string;
   title: string;
   kicker: string;
   paragraphs: string[];
+  html?: string;
 };
 
 type Meta = {
@@ -24,8 +26,13 @@ type Meta = {
 };
 
 // your component signature becomes (keep your existing storyPages type):
-const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta }) => {
-
+const HeroSection = ({
+  storyPages,
+  meta,
+}: {
+  storyPages: StoryPage[];
+  meta: Meta;
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const changePage = (nextPage: number) => {
@@ -37,12 +44,14 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
   };
-  
 
   const page = storyPages[currentPage];
   return (
     <div>
-      <section id="reader" className="relative bg-[#17352d] px-3 pb-10 pt-4 text-[#f7f2e8] sm:px-6 md:px-10 md:pb-16 md:pt-7">
+      <section
+        id="reader"
+        className="relative bg-[#17352d] px-3 pb-10 pt-4 text-[#f7f2e8] sm:px-6 md:px-10 md:pb-16 md:pt-7"
+      >
         <div className="paper-grain pointer-events-none absolute inset-0 opacity-[0.08]" />
         <div className="relative mx-auto max-w-295">
           <div className="mb-4 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/4.5 px-4 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between md:mb-6 md:px-5">
@@ -51,12 +60,18 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
                 <BookOpen size={17} />
               </span>
               <div className="min-w-0">
-               <p className="truncate font-serif text-[15px]">{meta.bookTitle}</p>
-<p className="truncate text-[10px] text-white/45">
-  {[meta.chapterLabel, meta.chapterTitle, meta.minutes ? `${meta.minutes} min read` : ""]
-    .filter(Boolean)
-    .join(" · ")}
-</p>
+                <p className="truncate font-serif text-[15px]">
+                  {meta.bookTitle}
+                </p>
+                <p className="truncate text-[10px] text-white/45">
+                  {[
+                    meta.chapterLabel,
+                    meta.chapterTitle,
+                    meta.minutes ? `${meta.minutes} min read` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:justify-end">
@@ -127,14 +142,18 @@ const HeroSection = ({ storyPages, meta }: { storyPages: StoryPage[]; meta: Meta
               </header>
 
               <div className="reader-prose flex-1 mx-auto max-w-[650px]">
-                {page.paragraphs.map((paragraph, index) => (
-                  <p
-                    key={`${currentPage}-${index}`}
-                    className={index === 0 ? "opening-paragraph" : ""}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+                {storyPages[currentPage].html ? (
+                  <div dangerouslySetInnerHTML={{ __html: storyPages[currentPage].html }} />
+                ) : (
+                  page.paragraphs.map((paragraph, index) => (
+                    <p
+                      key={`${currentPage}-${index}`}
+                      className={index === 0 ? "opening-paragraph" : ""}
+                    >
+                      {paragraph}
+                    </p>
+                  ))
+                )}
               </div>
 
               <div className="mx-auto mt-auto flex w-full max-w-[650px] items-center justify-between border-t border-[#2d332f]/16 pt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#888a84]">

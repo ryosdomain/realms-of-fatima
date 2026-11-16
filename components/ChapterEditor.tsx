@@ -9,7 +9,7 @@ import {
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TextStyle } from "@tiptap/extension-text-style";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import {
   saveChapter,
   addChapter,
@@ -121,13 +121,13 @@ function FormatButtons({ editor }: { editor: Editor }) {
       run: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
       className: "",
     },
-    {
-      label: "“",
-      title: "Quote",
-      active: editor.isActive("quote"),
-      run: () => editor.chain().focus().toggleNode("quote", "paragraph").run(),
-      className: "font-serif text-base",
-    },
+    // {
+    //   label: "“",
+    //   title: "Quote",
+    //   active: editor.isActive("quote"),
+    //   run: () => editor.chain().focus().toggleNode("quote", "paragraph").run(),
+    //   className: "font-serif text-base",
+    // },
   ];
 
   return (
@@ -150,7 +150,7 @@ function FormatButtons({ editor }: { editor: Editor }) {
 
       <span className="mx-1 h-5 w-px shrink-0 bg-[#18382f]/10" />
 
-      <select
+      {/* <select
         aria-label="Font size"
         title="Font size"
         value={editor.getAttributes("textStyle").fontSize ?? ""}
@@ -165,7 +165,7 @@ function FormatButtons({ editor }: { editor: Editor }) {
             {s}
           </option>
         ))}
-      </select>
+      </select> */}
 
       {/* <select
         aria-label="Font weight"
@@ -410,13 +410,25 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
   const changeStatus = edit(setStatus);
   const changeTextColor = edit(setTextColor);
   const changePageColor = edit(setPageColor);
+  const pastingRef = useRef(false);
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2] }, blockquote: false }),
-      TextStyle,
-      TextStyleExtras,
-      Quote,
+      StarterKit.configure({
+        heading: { levels: [1, 2] },
+        // only bold, italic, H1 and H2 stay: everything else is off
+        blockquote: false,
+        bulletList: false,
+        orderedList: false,
+        listItem: false,
+        listKeymap: false,
+        codeBlock: false,
+        code: false,
+        horizontalRule: false,
+        strike: false,
+        underline: false,
+        link: false,
+      }),
     ],
     content: chapter.content || "<p></p>",
     immediatelyRender: false,
@@ -427,6 +439,22 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
         class:
           "editor-copy min-h-[560px] outline-none font-serif text-[19px] leading-[1.9] md:text-[22px]",
         "aria-label": "Chapter content",
+      },
+      handlePaste: (view, event) => {
+        // guard: view.pasteText calls handlePaste again
+        if (pastingRef.current) return false;
+
+        const text = event.clipboardData?.getData("text/plain");
+        if (!text) return false;
+
+        event.preventDefault();
+        pastingRef.current = true;
+        try {
+          view.pasteText(text, event);
+        } finally {
+          pastingRef.current = false;
+        }
+        return true;
       },
     },
   });
@@ -611,7 +639,6 @@ export default function ChapterEditor({ book, chapter, chapters }: Props) {
                   placeholder="Untitled chapter"
                   aria-label="Chapter title"
                   className="h-12 w-full rounded-xl border border-[#18382f]/25 bg-white/70 px-4 font-serif text-2xl tracking-[-0.02em] outline-none focus:border-[#a45134]"
-                  
                 />
               </label>
             </div>

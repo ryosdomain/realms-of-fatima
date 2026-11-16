@@ -250,3 +250,41 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+.reader-prose h1 {
+  margin-top: 1.8em;
+  font-family: "Playfair Display", serif;
+  font-size: 1.7em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.reader-prose h2 {
+  margin-top: 1.6em;
+  font-family: "Playfair Display", serif;
+  font-size: 1.35em;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.reader-prose h1:first-child,
+.reader-prose h2:first-child,
+.reader-prose blockquote:first-child {
+  margin-top: 0;
+}
+.reader-prose h1 + p,
+.reader-prose h2 + p {
+  margin-top: 0.9em;
+}
+.reader-prose strong {
+  font-weight: 700;
+}
+.reader-prose em {
+  font-style: italic;
+}
+.reader-prose blockquote {
+  margin: 1.6em 0;
+  padding-left: 1em;
+  border-left: 3px solid #a45134;
+  font-style: italic;
+}
