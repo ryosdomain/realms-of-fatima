@@ -118,7 +118,7 @@ export async function getAuthorBook(id: string): Promise<LibraryBook | null> {
 
   const { data: chapters } = await supabase
     .from("chapters")
-    .select("id, title, position, visibility, content")
+    .select("id, title, position, visibility, content, text_color, page_color")
     .eq("book_id", id)
     .eq("status", "published")
     .order("position");
@@ -134,7 +134,7 @@ export async function getChapter(id: string) {
 
   let query = supabase
     .from("chapters")
-    .select("id, book_id, title, position, content")
+    .select("id, book_id, title, position, content, text_color, page_color")
     .eq("id", id)
     .eq("status", "published");
   if (!user) query = query.eq("visibility", "public");

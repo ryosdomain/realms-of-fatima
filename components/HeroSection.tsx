@@ -23,6 +23,8 @@ type Meta = {
   chapterLabel: string;
   chapterTitle: string;
   minutes: number;
+  pageColor?: string;
+  textColor?: string;
 };
 
 // your component signature becomes (keep your existing storyPages type):
@@ -120,6 +122,10 @@ const HeroSection = ({
           <article
             id="reader-page"
             className="reader-sheet relative mx-auto min-h-225 max-w-230 scroll-mt-4 overflow-hidden bg-[#fffdf7] px-7 py-9 text-[#2d332f] sm:px-12 sm:py-12 md:min-h-[1080px] md:px-[clamp(4rem,9vw,7.5rem)] md:py-16"
+            style={{
+              backgroundColor: meta.pageColor ?? "#fffdf7",
+              color: meta.textColor ?? "#32453f",
+            }}
           >
             <div className="paper-grain pointer-events-none absolute inset-0 opacity-[0.09]" />
             <div className="relative flex min-h-screen flex-col ">
@@ -143,7 +149,11 @@ const HeroSection = ({
 
               <div className="reader-prose flex-1 mx-auto max-w-[650px]">
                 {storyPages[currentPage].html ? (
-                  <div dangerouslySetInnerHTML={{ __html: storyPages[currentPage].html }} />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: storyPages[currentPage].html,
+                    }}
+                  />
                 ) : (
                   page.paragraphs.map((paragraph, index) => (
                     <p

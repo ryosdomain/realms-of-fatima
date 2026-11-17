@@ -70,7 +70,7 @@ const textColorOptions = [
   "#20262d",
   "#5b4036",
   "#284b63",
-  "#563d5c",
+  "#FFA500",
 ];
 const pageColorOptions = [
   "#fffdf7",

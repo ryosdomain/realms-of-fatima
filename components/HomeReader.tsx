@@ -2,13 +2,29 @@ import Link from "next/link";
 import { connection } from "next/server";
 import HeroSection from "@/components/HeroSection";
 import ReaderDrawer from "@/components/ReaderDrawer";
-import { getAuthorBook, getChapter, getLibrary, plain, toPages } from "@/lib/reader";
+import {
+  getAuthorBook,
+  getChapter,
+  getLibrary,
+  plain,
+  toPages,
+} from "@/lib/reader";
 
-function Notice({ title, text, link }: { title: string; text: string; link?: boolean }) {
+function Notice({
+  title,
+  text,
+  link,
+}: {
+  title: string;
+  text: string;
+  link?: boolean;
+}) {
   return (
     <section className="grid min-h-[60vh] place-items-center bg-[#17352d] px-5 py-24 text-center text-[#f7f2e8]">
       <div className="max-w-md">
-        <h2 className="font-serif text-3xl tracking-[-0.03em] md:text-4xl">{title}</h2>
+        <h2 className="font-serif text-3xl tracking-[-0.03em] md:text-4xl">
+          {title}
+        </h2>
         <p className="mt-3 text-sm leading-7 text-white/60">{text}</p>
         {link && (
           <Link
@@ -22,11 +38,14 @@ function Notice({ title, text, link }: { title: string; text: string; link?: boo
     </section>
   );
 }
-
+const safeColor = (value: string | null | undefined, fallback: string) =>
+  value && /^#[0-9a-fA-F]{6}$/.test(value) ? value : fallback;
 // the first paragraph of the first page gets the drop cap
 const dropCap = (blocks: string[]) => {
   const i = blocks.findIndex((b) => b.startsWith("<p>"));
-  return blocks.map((b, j) => (j === i ? b.replace("<p>", '<p class="opening-paragraph">') : b));
+  return blocks.map((b, j) =>
+    j === i ? b.replace("<p>", '<p class="opening-paragraph">') : b,
+  );
 };
 
 export default async function HomeReader({
@@ -53,25 +72,44 @@ export default async function HomeReader({
 
   if (!book) {
     return bookParam ? (
-      <Notice link title="This story isn't available" text="It may be private, or it hasn't been published yet." />
+      <Notice
+        link
+        title="This story isn't available"
+        text="It may be private, or it hasn't been published yet."
+      />
     ) : (
-      <Notice title="No stories yet" text="Stories will appear here as soon as they're published." />
+      <Notice
+        title="No stories yet"
+        text="Stories will appear here as soon as they're published."
+      />
     );
   }
 
   if (book.chapters.length === 0) {
-    return <Notice link title="No chapters yet" text="This story doesn't have a published chapter yet." />;
-  }
-
-  const pick = book.chapters.find((c) => c.id === chapterParam) ?? book.chapters[0];
-  const chapter = await getChapter(pick.id);
-  if (!chapter) {
     return (
-      <Notice link title="This chapter isn't available" text="It may be private, or it hasn't been published yet." />
+      <Notice
+        link
+        title="No chapters yet"
+        text="This story doesn't have a published chapter yet."
+      />
     );
   }
 
-  const note = book.tag === "Private" ? " · Private: only you can see this" : "";
+  const pick =
+    book.chapters.find((c) => c.id === chapterParam) ?? book.chapters[0];
+  const chapter = await getChapter(pick.id);
+  if (!chapter) {
+    return (
+      <Notice
+        link
+        title="This chapter isn't available"
+        text="It may be private, or it hasn't been published yet."
+      />
+    );
+  }
+
+  const note =
+    book.tag === "Private" ? " · Private: only you can see this" : "";
   const parts = toPages(chapter.content);
 
   const pages = parts.length
@@ -100,10 +138,16 @@ export default async function HomeReader({
     chapterLabel: `Chapter ${chapter.position}`,
     chapterTitle: chapter.title,
     minutes: words ? Math.max(1, Math.round(words / 200)) : 0,
+    pageColor: safeColor(chapter.page_color, "#fffdf7"),
+    textColor: safeColor(chapter.text_color, "#32453f"),
   };
 
   return (
-    <ReaderDrawer library={library} activeBookId={book.id} activeChapterId={chapter.id}>
+    <ReaderDrawer
+      library={library}
+      activeBookId={book.id}
+      activeChapterId={chapter.id}
+    >
       <HeroSection key={chapter.id} storyPages={pages} meta={meta} />
     </ReaderDrawer>
   );

@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownUp, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+
+import {
+  ArrowDownUp,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  Search,
+  X,
+} from "lucide-react";
 import type { LibraryBook } from "@/lib/reader";
 
 // which side the drawer opens from
@@ -36,22 +44,37 @@ const coverBg = (b: { cover_from: string; cover_to: string }) => ({
 
 /* ---------- small book cover for the strip ---------- */
 
-function MiniCover({ book, selected }: { book: LibraryBook; selected: boolean }) {
+function MiniCover({
+  book,
+  selected,
+}: {
+  book: LibraryBook;
+  selected: boolean;
+}) {
   const shape = book.cover_shape;
   return (
     <div
-      className={`relative aspect-[2/3] w-full overflow-hidden rounded-[2px_6px_6px_2px] shadow-lg transition duration-300 ${
+      className={`relative aspect-2/3 w-full overflow-hidden rounded-[2px_6px_6px_2px] shadow-lg transition duration-300 ${
         selected ? "ring-2 ring-offset-2 ring-offset-black" : ""
       }`}
       style={{ ...coverBg(book), ["--tw-ring-color" as string]: GOLD }}
     >
-      {shape === "circle" && <div className="absolute -right-3 -top-3 size-12 rounded-full bg-white/20" />}
-      {shape === "ring" && <div className="absolute -right-4 -top-4 size-14 rounded-full border-[5px] border-white/25" />}
-      {shape === "diamond" && <div className="absolute -right-2 top-1.5 size-10 rotate-45 bg-white/20" />}
+      {shape === "circle" && (
+        <div className="absolute -right-3 -top-3 size-12 rounded-full bg-white/20" />
+      )}
+      {shape === "ring" && (
+        <div className="absolute -right-4 -top-4 size-14 rounded-full border-[5px] border-white/25" />
+      )}
+      {shape === "diamond" && (
+        <div className="absolute -right-2 top-1.5 size-10 rotate-45 bg-white/20" />
+      )}
       {shape === "lines" && (
         <div
           className="absolute inset-0 opacity-25"
-          style={{ backgroundImage: "repeating-linear-gradient(135deg, #fff 0 1px, transparent 1px 7px)" }}
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, #fff 0 1px, transparent 1px 7px)",
+          }}
         />
       )}
       <div className="absolute inset-y-0 left-0 w-[9%] bg-linear-to-r from-black/40 to-transparent" />
@@ -74,7 +97,9 @@ export default function ReaderDrawer({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string | undefined>(activeBookId ?? library[0]?.id);
+  const [selected, setSelected] = useState<string | undefined>(
+    activeBookId ?? library[0]?.id,
+  );
   const [query, setQuery] = useState("");
   const [ascending, setAscending] = useState(true);
   const strip = useRef<HTMLDivElement>(null);
@@ -82,7 +107,9 @@ export default function ReaderDrawer({
   const book = library.find((b) => b.id === selected) ?? library[0];
 
   const q = query.trim().toLowerCase();
-  const filtered = (book?.chapters ?? []).filter((c) => !q || `${c.position} ${c.title}`.toLowerCase().includes(q));
+  const filtered = (book?.chapters ?? []).filter(
+    (c) => !q || `${c.position} ${c.title}`.toLowerCase().includes(q),
+  );
   const list = ascending ? filtered : [...filtered].reverse();
 
   const openDrawer = () => {
@@ -113,14 +140,47 @@ export default function ReaderDrawer({
   }, [open]);
 
   const close = () => setOpen(false);
+  const [loadingTo, setLoadingTo] = useState<string | null>(null);
 
+  // the new chapter arrived: hide the loader
+  useEffect(() => {
+    setLoadingTo(null);
+  }, [activeChapterId, activeBookId]);
+
+  // safety net: never leave the loader on forever if something goes wrong
+  useEffect(() => {
+    if (!loadingTo) return;
+    const t = setTimeout(() => setLoadingTo(null), 15000);
+    return () => clearTimeout(t);
+  }, [loadingTo]);
   return (
     // everything below is positioned inside this box, which is just the reader
-    <div className="relative isolate min-h-[560px] overflow-x-clip">
+    <div className="relative isolate min-h-140 overflow-x-clip">
       {children}
+      {loadingTo && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute inset-0 z-20 bg-[#17352d]/70 backdrop-blur-sm"
+        >
+          <div className="sticky top-[35vh] flex flex-col items-center gap-3 pt-10 text-[#f7f2e8]">
+            <Loader2
+              size={32}
+              className="animate-spin"
+              style={{ color: GOLD }}
+            />
+            <p className="text-sm font-semibold">Opening chapter…</p>
+          </div>
+        </div>
+      )}
 
       {/* click outside to close (covers only the reader) */}
-      {open && <div className="absolute inset-0 z-40 bg-black/30 md:bg-transparent" onClick={close} />}
+      {open && (
+        <div
+          className="absolute inset-0 z-40 bg-black/30 md:bg-transparent"
+          onClick={close}
+        />
+      )}
 
       {/* the tab that opens the library: on the reader's edge, centered vertically */}
       <button
@@ -160,12 +220,19 @@ export default function ReaderDrawer({
           <div className="flex items-center gap-2">
             <span
               className="shrink-0 rounded-lg border px-3 py-2 text-xs font-semibold"
-              style={{ color: GOLD, borderColor: `${GOLD}55`, backgroundColor: `${GOLD}1f` }}
+              style={{
+                color: GOLD,
+                borderColor: `${GOLD}55`,
+                backgroundColor: `${GOLD}1f`,
+              }}
             >
               Library
             </span>
             <label className="relative min-w-0 flex-1">
-              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50" />
+              <Search
+                size={14}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50"
+              />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -175,7 +242,9 @@ export default function ReaderDrawer({
             </label>
             <button
               onClick={() => setAscending(!ascending)}
-              aria-label={ascending ? "Newest chapter first" : "Oldest chapter first"}
+              aria-label={
+                ascending ? "Newest chapter first" : "Oldest chapter first"
+              }
               title={ascending ? "Showing 1 → last" : "Showing last → 1"}
               className="grid size-9 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/8 text-white/70 transition hover:bg-white/15 hover:text-white"
             >
@@ -191,7 +260,9 @@ export default function ReaderDrawer({
           </div>
 
           {!book ? (
-            <p className="mt-10 text-center text-sm text-white/55">No stories published yet.</p>
+            <p className="mt-10 text-center text-sm text-white/55">
+              No stories published yet.
+            </p>
           ) : (
             <>
               {/* book strip: scrolls sideways, never closes the chapters */}
@@ -216,21 +287,33 @@ export default function ReaderDrawer({
 
               {/* book header */}
               <div className="mt-3 shrink-0 text-center">
-                <h2 className="font-serif text-2xl tracking-tight">{book.title}</h2>
+                <h2 className="font-serif text-2xl tracking-tight">
+                  {book.title}
+                </h2>
                 <p className="mt-1.5 flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
-                  <span className="size-1.5 rounded-full" style={{ backgroundColor: GOLD }} />
-                  {book.chapters.length} {book.chapters.length === 1 ? "chapter" : "chapters"}
-                  {book.genre && <span className="text-white/40">· {book.genre}</span>}
+                  <span
+                    className="size-1.5 rounded-full"
+                    style={{ backgroundColor: GOLD }}
+                  />
+                  {book.chapters.length}{" "}
+                  {book.chapters.length === 1 ? "chapter" : "chapters"}
+                  {book.genre && (
+                    <span className="text-white/40">· {book.genre}</span>
+                  )}
                 </p>
                 {book.description && (
-                  <p className="mx-auto mt-2 line-clamp-2 max-w-sm text-xs leading-5 text-white/55">{book.description}</p>
+                  <p className="mx-auto mt-2 line-clamp-2 max-w-sm text-xs leading-5 text-white/55">
+                    {book.description}
+                  </p>
                 )}
               </div>
 
               {/* chapters: all the same size */}
               <ol className="mt-4 min-h-0 flex-1 space-y-2 overflow-y-auto px-1 pb-4 pt-1 [mask-image:linear-gradient(to_bottom,transparent,#000_3%,#000_94%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {list.length === 0 && (
-                  <li className="py-10 text-center text-sm text-white/50">No chapters match your search.</li>
+                  <li className="py-10 text-center text-sm text-white/50">
+                    No chapters match your search.
+                  </li>
                 )}
                 {list.map((c) => {
                   const current = c.id === activeChapterId;
@@ -239,7 +322,10 @@ export default function ReaderDrawer({
                       <Link
                         href={`/?book=${book.id}&chapter=${c.id}`}
                         scroll={false}
-                        onClick={close}
+                        onClick={() => {
+                          if (c.id !== activeChapterId) setLoadingTo(c.id); // clicking the chapter you're on doesn't load anything
+                          close();
+                        }}
                         aria-current={current ? "true" : undefined}
                         className={`group flex min-h-[68px] items-center gap-4 rounded-2xl border px-4 py-3 transition duration-200 ${
                           current
@@ -247,12 +333,19 @@ export default function ReaderDrawer({
                             : "border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10"
                         }`}
                       >
-                        <span className="w-7 shrink-0 text-center font-serif text-lg" style={{ color: GOLD }}>
+                        <span
+                          className="w-7 shrink-0 text-center font-serif text-lg"
+                          style={{ color: GOLD }}
+                        >
                           {c.position}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate font-serif text-[15px] text-white">{c.title}</span>
-                          <span className="mt-0.5 block text-[11px] text-white/50">{c.minutes} min read</span>
+                          <span className="block truncate font-serif text-[15px] text-white">
+                            {c.title}
+                          </span>
+                          <span className="mt-0.5 block text-[11px] text-white/50">
+                            {c.minutes} min read
+                          </span>
                         </span>
                         {current ? (
                           <span
